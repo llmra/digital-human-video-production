@@ -10,7 +10,7 @@ topic, copy, visual identity, or provider.
 {
   "schema_version": "2.0",
   "title": "Product explainer",
-  "language": "zh-CN",
+  "language": "en-US",
   "audience": "",
   "promise": "",
   "aspect_ratio": "16:9",
@@ -95,8 +95,8 @@ project/
 ```
 
 Raw audio, provider outputs, captured customer pages, fonts with unclear
-redistribution rights, `.env` files, and unredacted job logs stay local. Commit
-schemas, templates, redacted manifests, and QC evidence—not private media.
+redistribution rights, `.env` files, and unredacted job logs remain local. Commit
+schemas, templates, redacted manifests, and QC evidence — not private media.
 
 ## Approval gates
 
