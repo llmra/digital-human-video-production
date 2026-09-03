@@ -1,117 +1,117 @@
 # Digital Human Video Production
 
-> 从锁定语音、数字人预览、结构化动效到可审计成片的一体化 Codex Skill。
+> An integrated Codex Skill for end-to-end presenter-led video production — from locked voice masters and avatar previews to structured motion and auditable final deliverables.
 
-一个面向 Codex/本地创作工作流的通用 skill，用于把产品 brief、经过审核的旁白、数字人或真人口播、真实产品画面和动效合成为可交付的视频。
+This reusable skill targets Codex / local production workflows and turns a project brief, an approved narration master, an avatar or live presenter, real product captures, and deterministic motion/compositing into a deliverable video.
 
-它不绑定某个品牌、脚本、页面或视觉系统。每个项目的产品事实、文案、色彩、字体、媒体和供应商参数都放在项目目录中；仓库只保留可复用的方法、规则、脚手架和质量门。
+It is provider- and brand-neutral. Project-specific facts, copy, colors, fonts, media, and provider parameters live in each project's directory; the repository keeps only reusable logic, scripts, and validation rules.
 
 ## Demo
 
-这是一个项目级示例，不是 skill 的规范内容。它演示了：
+This demo is a project-level example (not normative skill content). It demonstrates:
 
-- 本地语音克隆与短语级变速，保留呼吸和非匀速气口；
-- 一次数字人母带生成，再在本地做显隐、裁切和画中画；
-- 真实产品页面与结构化信息卡的动效编排；
-- 画中画从开场主画面过渡到角落小窗；
-- 字幕、音频、画面和最终交付 QC。
+- local voice cloning with phrase-level speed adjustments while preserving breaths and non-uniform inhalations;
+- a single presenter/ avatar master generation followed by local visibility, crop, and picture-in-picture (PIP) composition;
+- choreography of real product pages and structured information cards;
+- PIP transitions from a full opening frame into a corner inset;
+- subtitle, audio, frame, and final-delivery QC.
 
-[观看/下载 v0.2 Demo 视频（1080p）](https://github.com/jaxxchen003/digital-human-video-production/releases/download/v0.2.0/digital-human-video-production-demo-v0.2.mp4)
+[Watch / Download the v0.2 demo (1080p)](https://github.com/jaxxchen003/digital-human-video-production/releases/download/v0.2.0/digital-human-video-production-demo-v0.2.mp4)
 
-公开 Demo 直接介绍这套通用制作链路：16:9、1920×1080、30fps、约 121 秒、H.264/AAC。内容、页面和视觉仅用于展示方法，不是可复制到其他项目的品牌模板。
+The public demo shows the general production chain: 16:9, 1920×1080, 30fps, ~121s, H.264/AAC. Content, pages, and visuals are illustrative and not intended as reusable brand assets.
 
-## v0.2：来自完整生产的新增能力
+## v0.2 — Additions derived from full production
 
-- **一次完整母带预算**：短预览通过人工审核后，同一音频 checksum 默认只允许一条已提交或完成的 presenter master；镜头级修改全部留在本地。
-- **可审计 provider ledger**：记录 preview/full-master、审批引用、媒体时长与 SHA-256，重复完整生成必须写明异常原因。
-- **测量式 PIP 裁切**：从多个时刻的人物中心计算 source crop、左右角坐标和输出误差，不再假设 `object-fit: cover` 会自动居中。
-- **双视图无黑边过渡**：全画幅和 measured crop 使用同一母带、同一时间轴、静音同步交叉淡化，避免全屏缩到圆形时露黑边或人物跳位。
-- **增强交付 QC**：完整解码、音画时长差、EBU R128 响度、黑帧、presenter master 停帧、设计性阅读 hold 分类、contact sheet 和三份主媒体 checksum 一次输出。
+- One full-master budget: after a short preview is human-reviewed, the same audio checksum permits at most one submitted or completed presenter master; shot-level edits remain local.
+- Auditable provider ledger: records preview/full-master submissions, approval references, media durations and SHA-256 checksums; repeated complete generation must include a declared exception reason.
+- Measured PIP cropping: calculate source crop, corner coordinates, and output error from multiple face-center measurements rather than assuming `object-fit: cover` centers the subject.
+- Dual-view borderless transitions: full-frame and measured-crop views use the same master and timeline with synchronized muted crossfades to avoid black edges or framing jumps when scaling.
+- Enhanced delivery QC: full decode pass, audio/visual duration sync, EBU R128 loudness, black-frame and freeze detection, presenter-master freeze checks, designed readable-hold classification, contact sheet, and three primary media checksums in a single output.
 
-## 能力介绍
+## Capabilities
 
-| 能力 | 产物 | 关键约束 |
+| Capability | Artifact | Key constraint |
 | --- | --- | --- |
-| Brief 与事实管理 | 项目 manifest、来源表、分场脚本 | 每个重要断言都有来源和审核人 |
-| 语音克隆 | 候选音频、锁定母带、生成 manifest | 锁定母带后才建立视觉时钟 |
-| 数字人口播 | 预览、完整 presenter master、审核事件 | 先短预览，再生成一次完整母带 |
-| Provider 成本与状态 | 私有 JSONL ledger | 同一锁定音频默认只有一个已提交或完成的完整母带任务 |
-| 动效分镜 | shot manifest、scene packet、caption timing | 每个镜头一个主动作，之后留出阅读保持 |
-| 本地合成 | measured crop、PIP schedule、字幕、最终 MP4 | 数字人静音复用，不遮挡页面、URL、代码或字幕 |
-| MCP/连接器演示 | 脱敏的请求与结果画面 | 不展示 token、cookie、私有 slug 或原始 header |
-| QC 与交付 | contact sheet、QC JSON、checksum | 异常停帧与声明的阅读 hold 分开判断 |
+| Brief & fact management | project manifest, source table, shot/timeline script | Every important assertion must have a source and reviewer |
+| Voice cloning | candidate audio, locked master, generation manifest | The locked voice master establishes the visual timing |
+| Presenter/ avatar rendering | preview, full presenter master, approval events | Generate a short preview first, then exactly one full master |
+| Provider cost & state | private JSONL ledger | The same locked audio checksum defaults to a single submitted or completed full-master job |
+| Motion shot design | shot manifest, scene packet, caption timing | One primary action per shot with subsequent readable hold |
+| Local composition | measured crop, PIP schedule, captions, final MP4 | Reuse muted presenter master, do not obscure page, URL, code, or captions |
+| MCP / connector demo | sanitized request/response screenshots | Do not show tokens, cookies, private slugs, or raw headers |
+| QC & delivery | contact sheet, QC JSON, checksums | Distinguish freeze frames from declared readable holds |
 
-## 依赖与技术方案
+## Dependencies & reference architecture
 
-本 skill 明确记录一条可复现的参考技术栈，同时保留清晰的适配器边界。下面列出的是制作工具和运行依赖，不是视频里要介绍的品牌或产品；视频主题、产品事实、文案、颜色、字体和页面始终由每个项目的本地 manifest 提供。
+This skill documents a reproducible reference stack and keeps clear adapter boundaries. The list below describes production tools and runtime dependencies, not the brands shown in a demo.
 
-### 参考实现栈
+### Reference implementation stack
 
-| 层 | 推荐方案 | 负责什么 | 必选性 | 可替换边界 |
+| Layer | Recommended | Responsibility | Required? | Replaceable boundary |
 | --- | --- | --- | --- | --- |
-| 语音 | [**VoxCPM / VoxCPM2**](https://github.com/OpenBMB/VoxCPM)（本地语音克隆） | 生成锁定的 WAV、短语级节奏和 generation manifest | 参考路径必选 | 任意能输出 WAV + 时间/生成记录的本地或云端 TTS/克隆引擎 |
-| 数字人 | [**HeyGen Photo Avatar / Avatar API**](https://developers.heygen.com/reference/create-video) | 用锁定音频生成 12–15 秒预览，再生成一条完整 presenter master | 使用数字人时必选 | 本地 talking-head、真人录制或其他 Avatar API；仍需保留预览门和一次完整母带 |
-| 动效 | [**HyperFrames**](https://github.com/heygen-com/hyperframes) + [GSAP runtime](https://hyperframes.app/docs/3-guides/3-gsap-animation) | 组织 scene packet、信息层级、可 seek 镜头动作和动效检查 | 参考路径必选 | CSS/WAAPI runtime、等价 React/HTML、动效工具或 NLE；必须输出可校验的镜头时间线 |
-| 合成 | [**Remotion**](https://www.remotion.dev/docs/render) | 按确定性时间线合成 measured PIP、字幕和音频 | 参考路径必选 | FFmpeg filter graph、NLE 或其他可复现合成器 |
-| 媒体与 QC | [**FFmpeg/ffprobe**](https://ffmpeg.org/documentation.html) + Python | 编码、完整解码、响度、黑帧、冻结帧、contact sheet、checksum 和 QC JSON | 本仓库完整 QC 必选 | 等价媒体工具，但必须保留机器检查和人工观看证据 |
-| 字幕/对齐 | Whisper 或其他 ASR | 词级时间戳、字幕和旁白一致性检查 | 可选 | 任意能生成可审计时间戳的 ASR |
+| Voice | VoxCPM / VoxCPM2 (local voice clone) | Produce locked WAV, phrase-level timing, and generation manifest | Reference path required | Any engine that outputs deterministic WAV + manifest |
+| Presenter / avatar | HeyGen Photo Avatar / Avatar API | Use locked audio to render a 12–15s preview, then a full presenter master | Recommended by reference | Local renderer or filmed presenter may replace it |
+| Motion | HyperFrames + GSAP runtime | Organize scene packets, information hierarchy, and seek-safe motion | Reference runtime | Other motion runtimes that support scene packets |
+| Composition | Remotion | Deterministic composition of measured PIP, captions, and audio | Reference path required | FFmpeg filter graph, NLE, or other deterministic compositor |
+| Media & QC | FFmpeg / ffprobe + Python | Encoding, full decode, loudness, black frames, freeze detection, contact sheets, checksums, and QC JSON | Provided in this repo | Any toolchain that reproduces these checks |
+| Subtitles / alignment | Whisper or other ASR | Word-level timestamps, captions, and narration alignment checks | Optional | Any ASR that produces auditable timestamps |
 
-参考路径可以概括为：
+Typical reference flow:
 
 ```text
-VoxCPM 锁定 WAV
-  → HeyGen 预览与完整 presenter master
+VoxCPM locked WAV
+  → HeyGen preview & full presenter master
   → HyperFrames + GSAP scene packet / base motion
-  → Remotion PIP、字幕与确定性合成
-  → FFmpeg/ffprobe 编码与 QC
+  → Remotion PIP, captions & deterministic composition
+  → FFmpeg / ffprobe encode & QC
 ```
 
-这张表描述“哪个工具解决哪类工程问题”，不规定内容中应该出现哪个品牌。供应商账号、HeyGen avatar/profile ID、VoxCPM 模型权重与参考音频、项目页面、客户素材和 API 凭据都必须留在项目私有目录或 secret store 中，不能写进公开 skill。
+The table above maps which tool addresses which engineering problem; it does not prescribe which brand name must appear in the final video. Provider account details, HeyGen avatar/profile IDs, VoxCPM weights, reference audio, and project pages remain private.
 
-### 运行依赖与私有边界
+### Runtime dependencies & private boundaries
 
-- Python 3：运行仓库自带的标准库脚本；
-- `ffmpeg` / `ffprobe`：媒体元数据、完整解码、响度、黑帧/静帧、contact sheet 和交付检查；
-- Node.js/npm：运行 Remotion 或其他 React/TypeScript 合成器；
-- HyperFrames 的 CLI/checker，以及其采用的动画 runtime（参考路径默认是 GSAP）；
-- HeyGen 的账号/API 或已授权的应用工作流，仅由项目私有 adapter 调用；
-- VoxCPM/VoxCPM2 的本地运行环境、模型权重和参考音频，仅由项目私有 runbook 管理；
-- 浏览器录制、设计导出或素材库，用于提供真实产品页面与合法素材；
-- 可选的 Git LFS、对象存储或 GitHub Release，用于存放不适合进入普通 Git 历史的大型 Demo 媒体；
-- 可选的 MCP/连接器客户端，用于演示工具调用或发布结果。
+- Python 3: run the repository's standard-library scripts;
+- ffmpeg / ffprobe: media metadata, full decode, loudness, black/freeze detection, contact sheets and delivery checks;
+- Node.js / npm: run Remotion or other React/TypeScript compositors;
+- HyperFrames CLI/checker and its animation runtime (the reference uses GSAP);
+- HeyGen account / Avatar API or an authorized application workflow, called only from a private project adapter;
+- VoxCPM / VoxCPM2 local runtime, model weights and reference audio, managed by a private project runbook;
+- Browser capture, design exports, or asset libraries for real product pages and licensed media;
+- Optional Git LFS, object storage, or GitHub releases for large demo media;
+- Optional MCP / connector client for demonstrating sanitized requests or publishing results.
 
-公开仓库只提供接口、脚本、规则和校验方法，不包含供应商 SDK、上传逻辑、账号授权、模型权重或产品内容。云端语音、脸部或客户素材的上传必须由项目自己的私有适配器完成。
+The public repository provides interfaces, scripts, rules, and validation methods only; it does not include provider SDKs, upload logic, credentials, model weights, or customer media. Any uploads of customer audio, faces, or private media must remain within a project's private runbook.
 
-更完整的输入/输出接口、官方文档、许可证边界和参考项目见 [`references/dependencies.md`](references/dependencies.md)。Remotion、模型权重、字体、音乐和参考仓库分别遵循各自许可证，不因本仓库采用 Apache-2.0 而自动改变。
+See `references/dependencies.md` for a fuller description of inputs/outputs, license boundaries, and reference projects.
 
-## 安装与使用
+## Installation & usage
 
 ```bash
 git clone https://github.com/jaxxchen003/digital-human-video-production.git
 cd digital-human-video-production
 
-# 校验 skill 结构（需要 Codex skill-creator 的 quick_validate.py）
+# Validate the skill structure (requires the Codex skill-creator quick_validate.py)
 python3 /path/to/quick_validate.py .
 
-# 创建一个不包含媒体的项目骨架
+# Create a project skeleton without media
 python3 scripts/init_project.py \
   --path ./my-video \
   --title "Product explainer"
 
-# 根据场景边界生成 presenter 布局时间表
+# Generate a presenter layout schedule from scene boundaries
 python3 scripts/build_avatar_schedule.py \
   --duration 120 \
   --scene-ends "24,48,72,96" \
   --left-scenes "3" \
   --output ./my-video/config/avatar-schedule.json
 
-# 用多个时刻的人物中心生成稳定的 source crop 与 PIP 几何
+# Compute stable source crop and PIP geometry from multiple face-center measurements
 python3 scripts/build_pip_geometry.py \
   --measurements ./my-video/config/pip-face-centers.json \
   --pip-diameter 220 \
   --output ./my-video/config/pip-geometry.json
 
-# 在私有 ledger 记录预览/完整母带；不会调用或上传到 provider
+# Record a provider job in a private ledger (this script does not call or upload to providers)
 python3 scripts/record_provider_job.py \
   --log ./my-video/logs/provider-generation.jsonl \
   --provider avatar-provider \
@@ -120,7 +120,7 @@ python3 scripts/record_provider_job.py \
   --audio ./my-video/audio/narration-master.wav \
   --output ./my-video/presenter/preview.mp4
 
-# 对最终媒体运行完整交付检查
+# Run delivery validation on final media
 python3 scripts/validate_delivery.py \
   --video ./my-video/deliverables/final.mp4 \
   --voice-master ./my-video/audio/narration-master.wav \
@@ -130,15 +130,15 @@ python3 scripts/validate_delivery.py \
   --output ./my-video/deliverables/qc.json
 ```
 
-在 Codex 中，skill 的调用形式是：
+In Codex the skill invocation is:
 
 ```text
 Use $digital-human-video-production to produce a verified presenter-led product video.
 ```
 
-供应商命令、模型参数、账号、素材路径和产品事实应由项目自己的私有 runbook 提供。
+Project-specific provider commands, model parameters, accounts, asset paths and product facts must remain in the project's private runbook.
 
-## 工作流链路
+## Workflow chain
 
 ```mermaid
 flowchart LR
@@ -165,45 +165,45 @@ flowchart LR
     P -- final --> Q[Delivery MP4 + QC JSON + checksums]
 ```
 
-核心原则是：锁定语音后再排时间线；数字人只生成一次完整母带；人物视频全程静音复用；所有镜头级布局、裁切和动效在本地完成。
+Core principles: lock the voice before scheduling the timeline; generate only one full presenter master; reuse the muted presenter video for composition; perform all shot-level layout, crop and motion locally.
 
-## 规则
+## Rules
 
-### 内容与事实
+### Content & facts
 
-1. 每个 load-bearing claim 都要有来源、检索时间和审核责任人。
-2. 真实产品画面优先；示意画面必须明确标注为 mock 或 illustration。
-3. 产品能力、权限、格式边界、访问条件和返回 URL 不凭截图推断。
-4. 项目变量放在本地 manifest；公共 skill 不携带品牌、客户内容或具体脚本。
+1. Every load-bearing claim must have a source, retrieval timestamp, and a named reviewer.
+2. Prefer real product captures; mark illustrative or mock images explicitly as such.
+3. Do not infer product capabilities, permissions, formats, or access rules from screenshots alone.
+4. Project variables live in local manifests; the public skill contains no brand, customer content, or client scripts.
 
-### 语音与数字人
+### Voice & presenter
 
-1. 旁白母带是唯一时间基准，任何音频变更都会重新打开时间线审核。
-2. 变速只作用于短语区域；呼吸、停顿和气口保持原速或单独设计。
-3. 先生成 12–15 秒预览，再生成一条完整数字人母带。
-4. 检查前后音色一致、唇形同步、眼神、微表情、手势和冻结帧。
-5. provider ledger 以锁定音频 checksum 为键，在第二次付费提交前阻止重复完整母带任务。
-6. 供应商任务记录、头像/资产 ID、API key 和原始响应只留在私有环境。
+1. The narration master is the single timing authority — any audio change reopens timeline review.
+2. Speed adjustments apply only to phrase regions; breaths, pauses, and inhalations are preserved or handled explicitly.
+3. Render a 12–15s presenter preview first, then produce exactly one full presenter master.
+4. Check for consistent timbre, lip-sync, eye contact, micro-expressions, gestures, and freeze frames before approval.
+5. The provider ledger keys entries by locked audio checksum and prevents duplicate paid full-master submissions before an explicit exception is recorded.
+6. Provider job records, avatar/asset IDs, API keys and raw responses remain private.
 
-### 镜头与动效
+### Shots & motion
 
-1. 每个 shot 只有一个主要动作：落位、路径绘制、分裂比较、输入、解析或交付。
-2. 动作结束后必须有阅读保持，不用连续漂移填充时间。
-3. Presenter 是讲解层，不得覆盖页面核心、URL、代码、表格或字幕。
-4. 画中画尺寸、圆角、位置、caption keep-out 和显隐规则全部配置化。
-5. 从多个时刻测量人物中心后再计算 crop；不要把 `object-fit: cover` 当作居中证据。
-6. provider 人物视频保持静音，锁定 WAV 是最终音频和时间轴的唯一来源。
-7. 优先真实页面、清晰层级和克制转场；避免重阴影、无意义光效和模板式级联。
+1. Each shot should have a single primary action: place, draw path, split-compare, input, parse, or deliver.
+2. After the action completes, provide a readable hold rather than endlessly filling time with drifting motion.
+3. The presenter is the narration layer and must not obscure page core elements, URLs, code blocks, or captions.
+4. PIP size, corner radius, position, caption keep-out, and visibility rules are fully configurable.
+5. Calculate crop from multiple measurements of the subject, rather than assuming `object-fit: cover` centers correctly.
+6. Keep provider presenter video muted; the locked WAV is the single source of audio timing.
+7. Prefer real pages, clear hierarchy, and restrained transitions; avoid heavy shadowing, gratuitous glow, or template cascades.
 
-### 隐私与版权
+### Privacy & copyright
 
-1. 不把音频、视频、客户页面、私有截图、token、cookie 或 `.env` 提交到 skill。
-2. 字体、Logo、音乐、SFX、模型和页面素材分别记录授权与归属。
-3. 大型 Demo 媒体优先使用 Git LFS、Release 或对象存储；本项目 Demo 作为 Release 资产提供，不属于 skill 核心。
+1. Do not submit audio, video, customer pages, private screenshots, tokens, cookies, or `.env` files to the public skill repository.
+2. Record fonts, logos, music, SFX, models and page assets with clear licensing and attribution.
+3. Store large demo media in Git LFS, Releases, or object storage; demo media released with this repository is an example and not part of the core skill.
 
-## 质量把控
+## Quality control
 
-### 自动化检查
+### Automated checks
 
 ```bash
 python3 /path/to/quick_validate.py .
@@ -218,50 +218,50 @@ python3 scripts/validate_delivery.py \
   --output deliverables/qc.json
 ```
 
-项目合成器还应运行 lint、typecheck、bundle/render smoke test 和 motion checker。默认媒体检查包括：
+Projects should also run linting, type checks, a bundle/render smoke test, and motion validation. Default media checks include:
 
-- 视频编码、分辨率、帧率、旋转信息和时长上限；
-- 音频编码、采样率、声道、响度和 true peak；
-- 完整解码、黑帧事件、缺失流、异常静帧和文件完整性；
-- presenter master 停帧必须为零；最终画面停帧只在匹配声明的 readable hold 时允许；
-- 锁定语音、presenter master 与最终视频的时长差不超过项目 tolerance；
-- 最终视频、旁白母带、数字人母带的 SHA-256；
-- manifest、工具版本、审批事件和来源记录是否齐全。
+- video encoding, resolution, framerate, rotation metadata and duration limits;
+- audio encoding, sample rate, channels, loudness and true peak;
+- full decode, black-frame events, missing streams, abnormal frozen frames and file integrity;
+- presenter-master freeze frames must be zero; final-render freezes are allowed only when matched to declared readable-hold intervals;
+- duration sync between locked voice, presenter master and final video within project tolerance;
+- SHA-256 checksums for the final video, voice master and presenter master;
+- presence of manifest, tool versions, approval events, and provenance records.
 
-### 人工复核
+### Human review
 
-至少观看开头、数字人从主画面进入 PIP 的位置、每个主要页面、信息密集段、连接器结果和结尾。确认：
+Watch the opening, the presenter transition into PIP, each major surface, dense information segments, connector results, and the close. Confirm:
 
-- 字幕与语音同步，英文 URL/命令没有被错误断行；
-- 数字人的口型、眼神、表情和呼吸感自然，没有明显冻结；
-- PIP 不遮挡核心内容，动效完成后有足够阅读时间；
-- 页面、字体、颜色、素材授权和产品事实符合项目 manifest；
-- 输出在目标播放器和实际交付尺寸下仍然可读。
+- captions align to audio and that English URLs / commands are not broken across lines;
+- presenter lip-sync, eye contact, expression and breathing feel natural; there are no obvious freezes;
+- PIP does not obscure core content and each motion leaves sufficient readable hold time;
+- page assets, fonts, colors, material licensing and product facts match the project manifest;
+- outputs remain legible in the target player and at delivery sizes.
 
-任何未完成的检查都必须把交付标记为 `preview` 或 `candidate`，不能标记为 `final`。
+Any missing checks must cause the deliverable to be labeled `preview` or `candidate`, not `final`.
 
-## 动效形式
+## Motion forms
 
-动效可以从以下形式中选择，并根据项目视觉系统重绘：
+Choose from the following motion forms and restyle them to a project's visual system:
 
-- **卡片落位**：多个输入逐一进入固定位置，最后形成结构化关系；
-- **路径绘制**：从文件/输入到处理层再到用户可见结果，逐站推进；
-- **分屏比较**：保持共同坐标系，按同一标准逐项比较选项；
-- **输入—确认—结果**：真实字段输入、一次按钮动作、状态确认和结果解析；
-- **锚点循环**：核心页面保持稳定，周围的受众、场景或状态替换；
-- **Presenter PIP**：主画面到小窗的短暂 settle、换角、隐藏与再次出现；
-- **收束交付**：清掉非关键 chrome，只留下 URL、结果或下一步 CTA。
+- Card placement: multiple inputs enter fixed slots and form a structured relationship;
+- Path draw: advance through processing stages from input to user-visible result;
+- Split-screen comparison: keep a shared coordinate system and compare options side-by-side;
+- Input → confirm → result: real field input, a single action, state confirmation and result parsing;
+- Anchor loop: keep the core page stable while surrounding context, audience, or states rotate;
+- Presenter PIP: short settle, angle change, hiding and reappearance from full-frame to inset;
+- Delivery focus: remove non-essential chrome and leave only URLs, results or a CTA.
 
-### 动效与流程参考
+## Motion & process references
 
-- [video-shotcraft](https://github.com/Vincentwei1021/video-shotcraft)：shot card、单一动作、readable hold 和 Remotion 画面语法；
-- [HyperFrames Motion Director](https://github.com/geekjourneyx/hyperframes-motion-director)：中文优先的 brief、storyboard、design-engineering contract 与审核门；
-- [HyperFrames Motion Library](https://github.com/nutllwhy/hyperframes-motion-library)：参数化模板、透明叠加格式与本地模板库思路；
-- [Rachel Digital Human Production](https://github.com/Jingyi-Wu-Richael/rachel-digital-human-production)：付费调用前置检查、15 秒预览和任务状态记录。
+- video-shotcraft: shot cards, single action, readable hold and Remotion screen grammar;
+- HyperFrames Motion Director: brief, storyboard, design-engineering contract and review gates;
+- HyperFrames Motion Library: parameterized templates, transparent overlay formats and local template library;
+- Rachel Digital Human Production: pre-submit checks, 15s preview and job state recording.
 
-这些仓库都是方法参考，不是本 Skill 的运行依赖。不要复制素材、固定模板或品牌设计；其中 Motion Director 使用 AGPL-3.0，Motion Library 在本次核对时未声明仓库许可证，复用代码前必须单独确认。Rachel 的 MiniMax 路径也不是本 Skill 的依赖。
+These repositories are method references only, not runtime dependencies. Do not copy brand assets or fixed templates.
 
-## 仓库结构
+## Repository layout
 
 ```text
 .
@@ -289,17 +289,16 @@ python3 scripts/validate_delivery.py \
 └── README.md
 ```
 
-## 未来拓展
+## Future work
 
-- 多画幅 profile：16:9、9:16、4:5、1:1 的安全区与 measured PIP 几何自动重映射；
-- Provider adapter：统一本地模型、Avatar API、真人录制和不同合成器的接口；
-- Schema-first timeline：用 JSON Schema 校验 manifest、approval event、shot packet 和 QC report；
-- 语音质量增强：自动检测前后音色漂移、异常停顿、ASR 相似度和多语言字幕；
-- 视觉回归：自动人物检测、关键帧差异、遮挡检测、字幕 safe-area 和页面可读性评分；
-- 审批与发布：把 brief、音频、数字人预览、时间线、QC 和 release asset 串成可审计事件流；
-- 连接器适配：为不同 MCP/workspace host 提供脱敏的请求、权限和结果展示模板；
-- 成本与缓存：在现有 provider ledger 上增加真实金额、额度和可复用资产命中率。
+- multi-aspect profiles: automatic remapping of safe areas and measured PIP geometry for 16:9, 9:16, 4:5, and 1:1;
+- provider adapters: unify local models, avatar APIs, live capture and different compositors behind a single adapter;
+- schema-first timeline: validate manifest, approval events, shot packets and QC reports with JSON Schema;
+- voice quality improvements: automatic detection of timbre drift, abnormal pauses, ASR similarity and multilingual captions;
+- visual regression: automated subject detection, keyframe difference checks, occlusion detection, caption safe-area and page readability scoring;
+- approval & release: chain brief, audio, avatar preview, timeline, QC and release assets into an auditable event stream;
+- cost & cache: add real costs, quotas and reusable-asset hit rates to the provider ledger.
 
 ## License
 
-Apache License 2.0。项目媒体、字体、模型、Logo、页面截图和第三方素材不因本仓库许可证自动获得再分发权。
+Apache License 2.0. Project media, fonts, models, logos, screenshots and third-party assets are not automatically redistributed by this repository's license.
